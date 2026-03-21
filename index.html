@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>River flow forecasting - Calgary data portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#162240;--bg-elevated:#1D2D52;--bg-card:#243868;
+  --border:#385588;--border-hover:#4A6CAA;
+  --text:#EDE9E2;--text-muted:#A0A8BC;--text-dim:#6A7590;
+  --navy:#3B6FD4;--navy-bright:#5588EE;
+  --gold:#E8C230;--gold-dim:rgba(232,194,48,0.18);
+}
+body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;line-height:1.6;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat:repeat;background-size:128px 128px}
+a{color:var(--navy-bright);text-decoration:none;transition:color .2s}
+a:hover{color:var(--gold)}
+.container{max-width:960px;margin:0 auto;padding:0 24px}
+nav{padding:20px 0;border-bottom:1px solid var(--border)}
+nav .container{display:flex;align-items:center;justify-content:space-between}
+.nav-back{font-family:'IBM Plex Mono',monospace;font-size:.85rem;color:var(--text-muted);display:flex;align-items:center;gap:6px}
+.nav-back:hover{color:var(--gold)}
+.nav-label{font-family:'IBM Plex Mono',monospace;font-size:.75rem;color:var(--text-dim);letter-spacing:.06em;text-transform:uppercase}
+.hero{padding:72px 0 56px;text-align:center}
+.project-num{font-family:'IBM Plex Mono',monospace;font-size:.8rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.hero h1{font-family:'Instrument Serif',serif;font-size:clamp(2.2rem,5vw,3.4rem);font-weight:400;line-height:1.15;margin-bottom:20px}
+.hero-desc{max-width:640px;margin:0 auto 28px;color:var(--text-muted);font-size:1.05rem;line-height:1.65}
+.tags{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:32px}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:.72rem;padding:5px 12px;border-radius:20px;border:1px solid var(--border);color:var(--text-muted);background:var(--bg-elevated)}
+.tag.gold{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+.hero-metric{display:inline-flex;align-items:baseline;gap:10px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:12px;padding:14px 28px}
+.hero-metric .val{font-family:'Instrument Serif',serif;font-size:2.4rem;color:var(--gold)}
+.hero-metric .label{font-size:.9rem;color:var(--text-muted)}
+.section{padding:56px 0}
+.section-label{font-family:'IBM Plex Mono',monospace;font-size:.75rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.section-title{font-family:'Instrument Serif',serif;font-size:1.8rem;font-weight:400;margin-bottom:32px}
+.app-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.app-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color .25s,transform .25s}
+.app-card:hover{border-color:var(--border-hover);transform:translateY(-3px)}
+.app-card-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:1rem}
+.app-card-icon.navy{background:rgba(59,111,212,.15);color:var(--navy-bright)}
+.app-card-icon.gold{background:var(--gold-dim);color:var(--gold)}
+.app-card h3{font-family:'IBM Plex Sans',sans-serif;font-size:.95rem;font-weight:600;margin-bottom:6px}
+.app-card p{font-size:.82rem;color:var(--text-muted);line-height:1.5}
+.mockup-bar{height:4px;border-radius:2px;margin-top:14px;background:linear-gradient(90deg,var(--navy) 0%,var(--navy-bright) 60%,transparent 100%)}
+.mockup-bar.gold{background:linear-gradient(90deg,var(--gold) 0%,rgba(232,194,48,.3) 80%,transparent 100%)}
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.metric-card{background:var(--bg-elevated);border:1px solid var(--border);border-radius:12px;padding:24px;text-align:center;transition:border-color .25s}
+.metric-card:hover{border-color:var(--border-hover)}
+.metric-val{font-family:'Instrument Serif',serif;font-size:2.2rem;color:var(--gold);margin-bottom:4px}
+.metric-label{font-size:.85rem;color:var(--text-muted)}
+.metric-sub{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--text-dim);margin-top:4px}
+.method-content{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+.method-text{color:var(--text-muted);font-size:.95rem;line-height:1.7}
+.pipeline{display:flex;flex-direction:column;gap:0}
+.pipe-step{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg-card);border:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:var(--text-muted)}
+.pipe-step:first-child{border-radius:10px 10px 0 0}
+.pipe-step:last-child{border-radius:0 0 10px 10px}
+.pipe-step .num{color:var(--gold);font-weight:500;min-width:20px}
+.links-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.link-card{display:flex;align-items:center;gap:12px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:14px 18px;transition:border-color .25s,transform .25s;color:var(--text)}
+.link-card:hover{border-color:var(--gold);transform:translateY(-2px);color:var(--gold)}
+.link-card .ico{font-size:1.1rem;min-width:20px;text-align:center}
+.link-card .lbl{font-size:.88rem;font-weight:500}
+.link-card .sub{font-size:.72rem;color:var(--text-dim)}
+footer{border-top:1px solid var(--border);padding:32px 0;margin-top:40px;text-align:center}
+footer p{font-size:.8rem;color:var(--text-dim)}
+.fadeUp{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.fadeUp.visible{opacity:1;transform:translateY(0)}
+@media(max-width:640px){
+  .method-content{grid-template-columns:1fr}
+  .hero{padding:48px 0 36px}
+  .section{padding:40px 0}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a href="../../docs/index.html" class="nav-back">&larr; Back to portfolio</a>
+    <span class="nav-label">Project 04 of 07</span>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="fadeUp">
+      <p class="project-num">Project 04</p>
+      <h1>River flow forecasting</h1>
+      <p class="hero-desc">The 2013 Calgary floods caused over $6 billion in damage and displaced 100,000+ residents. This project builds a multi-model forecasting tool using 9.5M+ five-minute Bow River observations for early-warning systems that protect lives and infrastructure.</p>
+      <div class="tags">
+        <span class="tag">XGBoost</span>
+        <span class="tag">ARIMA</span>
+        <span class="tag">Time series</span>
+        <span class="tag">Forecasting</span>
+        <span class="tag gold">9.5M readings</span>
+      </div>
+      <div class="hero-metric">
+        <span class="val">0.89</span>
+        <span class="label">R-squared (XGBoost)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="fadeUp">
+      <p class="section-label">Interactive app</p>
+      <h2 class="section-title">Streamlit dashboard pages</h2>
+      <div class="app-grid">
+        <div class="app-card">
+          <div class="app-card-icon navy">01</div>
+          <h3>Current flow</h3>
+          <p>Real-time Bow River flow visualization with historical context and rolling averages</p>
+          <div class="mockup-bar"></div>
+        </div>
+        <div class="app-card">
+          <div class="app-card-icon navy">02</div>
+          <h3>Forecast</h3>
+          <p>Multi-day ahead flow predictions with confidence intervals and flood-risk thresholds</p>
+          <div class="mockup-bar"></div>
+        </div>
+        <div class="app-card">
+          <div class="app-card-icon gold">03</div>
+          <h3>Model comparison</h3>
+          <p>Side-by-side evaluation of ARIMA, Random Forest, and XGBoost forecast accuracy</p>
+          <div class="mockup-bar gold"></div>
+        </div>
+        <div class="app-card">
+          <div class="app-card-icon gold">04</div>
+          <h3>Alerts</h3>
+          <p>Configurable flow thresholds with automated alerts when readings exceed safe levels</p>
+          <div class="mockup-bar gold"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="fadeUp">
+      <p class="section-label">Performance</p>
+      <h2 class="section-title">Key results</h2>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-val">0.89</div>
+          <div class="metric-label">R-squared</div>
+          <div class="metric-sub">XGBoost regressor</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">~10</div>
+          <div class="metric-label">MAE (m3/s)</div>
+          <div class="metric-sub">Best model performance</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">9.5M+</div>
+          <div class="metric-label">Observations</div>
+          <div class="metric-sub">Five-minute intervals</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="fadeUp">
+      <p class="section-label">Approach</p>
+      <h2 class="section-title">Methodology</h2>
+      <div class="method-content">
+        <div class="method-text">
+          <p>Fetched 9.5M+ five-minute river level and flow observations via the Socrata API. Resampled to daily means and engineered rolling averages (7-day, 30-day) and lag features. Trained ARIMA/SARIMA for classical time-series modeling with confidence intervals. Trained Random Forest and XGBoost regressors on engineered lag and calendar features for comparison.</p>
+        </div>
+        <div class="pipeline">
+          <div class="pipe-step"><span class="num">01</span> Fetch 9.5M river observations</div>
+          <div class="pipe-step"><span class="num">02</span> Resample to daily means</div>
+          <div class="pipe-step"><span class="num">03</span> Engineer rolling and lag features</div>
+          <div class="pipe-step"><span class="num">04</span> Train ARIMA/SARIMA baseline</div>
+          <div class="pipe-step"><span class="num">05</span> Train XGBoost and Random Forest</div>
+          <div class="pipe-step"><span class="num">06</span> Deploy Streamlit dashboard</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="fadeUp">
+      <p class="section-label">Resources</p>
+      <h2 class="section-title">Links</h2>
+      <div class="links-grid">
+        <a href="https://github.com/" class="link-card" target="_blank">
+          <span class="ico">&lt;/&gt;</span>
+          <div><div class="lbl">GitHub repository</div><div class="sub">Source code and notebooks</div></div>
+        </a>
+        <a href="notebooks/01_eda.ipynb" class="link-card">
+          <span class="ico">&#9881;</span>
+          <div><div class="lbl">Jupyter notebook</div><div class="sub">Exploratory data analysis</div></div>
+        </a>
+        <a href="../../docs/index.html" class="link-card">
+          <span class="ico">&#9632;</span>
+          <div><div class="lbl">Full portfolio</div><div class="sub">All Calgary projects</div></div>
+        </a>
+        <a href="https://calgary-river-flow.streamlit.app/" class="link-card" target="_blank">
+          <span class="ico">&#9654;</span>
+          <div><div class="lbl">Live app</div><div class="sub">Streamlit dashboard</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Calgary data portfolio. Built with open data from the City of Calgary.</p>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  const els=document.querySelectorAll('.fadeUp');
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})
+  },{threshold:0.12});
+  els.forEach(el=>obs.observe(el));
+});
+</script>
+</body>
+</html>
